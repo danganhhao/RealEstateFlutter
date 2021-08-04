@@ -7,13 +7,18 @@ import 'package:real_estate/data/models/user/user.dart';
 import 'package:real_estate/data/models/user/user_list.dart';
 import 'package:real_estate/data/network/repository/user_repository.dart';
 import 'package:real_estate/di/components/service_locator.dart';
+import 'package:real_estate/widgets/progress_indicator_widget.dart';
 
-class UserPage extends StatefulWidget {
+class HomeScreen extends StatefulWidget {
+  static Route<dynamic> route() => MaterialPageRoute(
+        builder: (context) => HomeScreen(),
+      );
+
   @override
   _UserPageState createState() => _UserPageState();
 }
 
-class _UserPageState extends State<UserPage> {
+class _UserPageState extends State<HomeScreen> {
   final UserBloc _userBloc = UserBloc(getIt<UserRepository>());
 
   @override
@@ -25,8 +30,25 @@ class _UserPageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('COVID-19 List')),
-      body: _buildListUser(),
+      appBar: AppBar(title: Center(child: Text("Real Estate"))),
+      body: _buildHome(),
+    );
+  }
+
+  Widget _buildHome() {
+    return Container(
+      margin: const EdgeInsets.only(left: 10, right: 10, top: 0, bottom: 0),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: [
+            Text("111111"),
+            Text("111111"),
+            Text("111111"),
+            Text("111111"),
+          ],
+        ),
+      ),
     );
   }
 
@@ -53,10 +75,10 @@ class _UserPageState extends State<UserPage> {
                 return _buildLoading();
               } else if (state is BaseLoaded) {
                 print('xxxx');
-                if (state.props.isNotEmpty){
+                if (state.props.isNotEmpty) {
                   if (state.props[0] is UserList) {
                     List<User>? data = (state.props[0] as UserList).users;
-                    if (data != null ) {
+                    if (data != null) {
                       print(data);
                       return _buildListView(data);
                     }
@@ -75,10 +97,10 @@ class _UserPageState extends State<UserPage> {
     );
   }
 
-  Widget _buildLoading() => Center(child: CircularProgressIndicator());
+  Widget _buildLoading() => CustomProgressIndicatorWidget();
 
   Widget _buildListView(List<User> data) => ListView.builder(
-    itemCount: data.length,
+      itemCount: data.length,
       itemBuilder: (user, index) {
         return Text(data[index].name ?? "");
       });
