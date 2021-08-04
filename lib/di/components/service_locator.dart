@@ -1,8 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:real_estate/data/bloc/search_bloc/search_bloc.dart';
 import 'package:real_estate/data/bloc/user_bloc/user_bloc.dart';
+import 'package:real_estate/data/network/api/search_engine/search_api.dart';
 import 'package:real_estate/data/network/api/users/user_api.dart';
 import 'package:real_estate/data/network/dio_client.dart';
+import 'package:real_estate/data/network/repository/search_repository.dart';
 import 'package:real_estate/data/network/repository/user_repository.dart';
 import 'package:real_estate/data/network/rest_client.dart';
 import 'package:real_estate/data/sharedpref/shared_preference_helper.dart';
@@ -30,6 +33,7 @@ Future<void> setupLocator() async {
 
   // api's:---------------------------------------------------------------------
   getIt.registerSingleton(UserApi(getIt<DioClient>(), getIt<RestClient>()));
+  getIt.registerSingleton(SearchApi(getIt<DioClient>()));
 
   // data sources
   // getIt.registerSingleton(PostDataSource(await getIt.getAsync<Database>()));
@@ -41,6 +45,11 @@ Future<void> setupLocator() async {
     // getIt<PostDataSource>(),
   ));
 
+  getIt.registerSingleton(SearchRepository(
+    getIt<SearchApi>(),
+    getIt<SharedPreferenceHelper>(),
+  ));
+
   // stores:--------------------------------------------------------------------
   // getIt.registerSingleton(LanguageStore(getIt<Repository>()));
   // getIt.registerSingleton(PostStore(getIt<Repository>()));
@@ -49,4 +58,5 @@ Future<void> setupLocator() async {
 
   // blocs:---------------------------------------------------------------------
   getIt.registerSingleton(UserBloc(getIt<UserRepository>()));
+  getIt.registerSingleton(SearchBloc(getIt<SearchRepository>()));
 }

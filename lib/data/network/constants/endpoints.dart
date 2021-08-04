@@ -11,5 +11,6 @@ class Endpoints {
   static const int connectionTimeout = 30000;
 
   static const String getUsers = "$baseUrl/api/user";
+  static const String getPosts = "$baseUrl/api/search/?page=1";
 
 }
