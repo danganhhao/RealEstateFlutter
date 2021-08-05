@@ -5,15 +5,11 @@ import 'package:real_estate/constants/dimens.dart';
 class HeaderSearchBoxWidget extends StatelessWidget {
   const HeaderSearchBoxWidget({
     Key? key,
-    required this.size,
-    required this.context,
   }) : super(key: key);
-
-  final Size size;
-  final BuildContext context;
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Container(
       height: size.height * 0.2,
       margin: const EdgeInsets.only(bottom: Dimens.default_padding * 1.5),
@@ -40,7 +36,7 @@ class HeaderSearchBoxWidget extends StatelessWidget {
                 ),
                 Spacer(),
                 ClipOval(
-                    child: Image.asset("assets/icons/logo.jpg",
+                    child: Image.asset("assets/icons/icon1.jpg",
                         width: 40, height: 40, fit: BoxFit.cover)),
               ],
             ),

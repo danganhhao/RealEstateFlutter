@@ -1,10 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:real_estate/data/bloc/content_bloc/content_bloc.dart';
 import 'package:real_estate/data/bloc/search_bloc/search_bloc.dart';
 import 'package:real_estate/data/bloc/user_bloc/user_bloc.dart';
+import 'package:real_estate/data/network/api/content/content_api.dart';
 import 'package:real_estate/data/network/api/search_engine/search_api.dart';
 import 'package:real_estate/data/network/api/users/user_api.dart';
 import 'package:real_estate/data/network/dio_client.dart';
+import 'package:real_estate/data/network/repository/content_repository.dart';
 import 'package:real_estate/data/network/repository/search_repository.dart';
 import 'package:real_estate/data/network/repository/user_repository.dart';
 import 'package:real_estate/data/network/rest_client.dart';
@@ -34,6 +37,7 @@ Future<void> setupLocator() async {
   // api's:---------------------------------------------------------------------
   getIt.registerSingleton(UserApi(getIt<DioClient>(), getIt<RestClient>()));
   getIt.registerSingleton(SearchApi(getIt<DioClient>()));
+  getIt.registerSingleton(ContentApi(getIt<DioClient>()));
 
   // data sources
   // getIt.registerSingleton(PostDataSource(await getIt.getAsync<Database>()));
@@ -50,6 +54,11 @@ Future<void> setupLocator() async {
     getIt<SharedPreferenceHelper>(),
   ));
 
+  getIt.registerSingleton(ContentRepository(
+    getIt<ContentApi>(),
+    getIt<SharedPreferenceHelper>(),
+  ));
+
   // stores:--------------------------------------------------------------------
   // getIt.registerSingleton(LanguageStore(getIt<Repository>()));
   // getIt.registerSingleton(PostStore(getIt<Repository>()));
@@ -59,4 +68,5 @@ Future<void> setupLocator() async {
   // blocs:---------------------------------------------------------------------
   getIt.registerSingleton(UserBloc(getIt<UserRepository>()));
   getIt.registerSingleton(SearchBloc(getIt<SearchRepository>()));
+  getIt.registerSingleton(ContentBloc(getIt<ContentRepository>()));
 }

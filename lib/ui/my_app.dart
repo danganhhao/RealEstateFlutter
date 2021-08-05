@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:real_estate/constants/app_theme.dart';
 import 'package:real_estate/constants/colors.dart';
+import 'package:real_estate/data/bloc/content_bloc/content_bloc.dart';
 import 'package:real_estate/data/bloc/search_bloc/search_bloc.dart';
 import 'package:real_estate/data/bloc/user_bloc/user_bloc.dart';
+import 'package:real_estate/data/network/repository/content_repository.dart';
 import 'package:real_estate/data/network/repository/search_repository.dart';
 import 'package:real_estate/data/network/repository/user_repository.dart';
 import 'package:real_estate/di/components/service_locator.dart';
@@ -22,6 +24,7 @@ class _MyAppState extends State<MyApp> {
       providers: [
         BlocProvider(create: (_) => UserBloc(getIt<UserRepository>())),
         BlocProvider(create: (_) => SearchBloc(getIt<SearchRepository>())),
+        BlocProvider(create: (_) => ContentBloc(getIt<ContentRepository>())),
       ],
       child: MaterialApp(
         title: "Real Estate",
