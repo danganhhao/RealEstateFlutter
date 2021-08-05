@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:real_estate/constants/app_theme.dart';
+import 'package:real_estate/constants/colors.dart';
 import 'package:real_estate/data/bloc/search_bloc/search_bloc.dart';
 import 'package:real_estate/data/bloc/user_bloc/user_bloc.dart';
 import 'package:real_estate/data/network/repository/search_repository.dart';
@@ -26,7 +27,12 @@ class _MyAppState extends State<MyApp> {
         title: "Real Estate",
         initialRoute: "/",
         routes: Routes.routes,
-        // theme: themeData,
+        theme: ThemeData(
+            scaffoldBackgroundColor: AppColors.backgroundColor,
+            primaryColor: AppColors.primaryColor,
+            textTheme: Theme.of(context).textTheme.apply(bodyColor: AppColors.textColor),
+            visualDensity: VisualDensity.adaptivePlatformDensity
+        ),
         home: TabsPage(),
         debugShowCheckedModeBanner: false,
       ),

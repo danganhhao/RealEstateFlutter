@@ -7,6 +7,9 @@ class AppColors {
   static const Color blue = Colors.blue;
   static const Color lightBlue = Colors.lightBlue;
   static const Color grey = Colors.grey;
+  static const Color primaryColor = Color(0xff0c9869);
+  static const Color textColor = Color(0xff3c4046);
+  static const Color backgroundColor = Color(0xfff9f8fd);
 
   static const Map<int, Color> orange = <int, Color>{
     50: Color(0xFFFCF2E7),
