@@ -34,7 +34,11 @@ dependencies:
   # compare 2 object
   equatable: ^1.1.1
 
+  # State management
   flutter_bloc: ^7.1.0
+
+  # Web viewer
+  webview_flutter: ^2.0.10
 
   # XXTEA is a fast and secure encryption algorithm. This is a XXTEA library for Dart.
   xxtea: ^2.1.0

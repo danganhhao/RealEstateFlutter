@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:real_estate/constants/colors.dart';
 import 'package:real_estate/constants/dimens.dart';
 import 'package:real_estate/data/bloc/base_state.dart';
 import 'package:real_estate/data/bloc/content_bloc/content_bloc.dart';
@@ -11,6 +12,7 @@ import 'package:real_estate/data/bloc/search_bloc/search_event.dart';
 import 'package:real_estate/data/models/city_info/city_info.dart';
 import 'package:real_estate/data/models/search_engine/entity/post.dart';
 import 'package:real_estate/ui/home/grid_city.dart';
+import 'package:real_estate/ui/home/news_widget.dart';
 import 'package:real_estate/ui/home/post_card.dart';
 import 'package:real_estate/ui/home/title_with_more_btn.dart';
 import 'package:real_estate/utils/snackbar/snackbar.dart';
@@ -77,7 +79,8 @@ class _HomeScreenState extends State<HomeScreen> {
             const HeaderSearchBoxWidget(),
             _buildRecommend(size),
             _buildRecommend(size),
-            _buildCityWidget(size)
+            _buildCityWidget(size),
+            _buildNews(size)
           ],
         ),
       ),
@@ -162,7 +165,36 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _cityPress(CityItem item) {
-    Snackbar.show(context, item.name??"");
+    Snackbar.show(context, item.name ?? "");
+  }
+
+  Widget _buildNews(Size size) {
+    List<String> links = [
+      "https://batdongsan.com.vn/phan-tich-nhan-dinh/kho-phan-doan-thoi-diem-phuc-hoi-cua-thi-truong-bat-dong-san-ar107284",
+      "https://batdongsan.com.vn/phan-tich-nhan-dinh/kho-phan-doan-thoi-diem-phuc-hoi-cua-thi-truong-bat-dong-san-ar107284",
+      "https://batdongsan.com.vn/phan-tich-nhan-dinh/kho-phan-doan-thoi-diem-phuc-hoi-cua-thi-truong-bat-dong-san-ar107284",
+      "https://batdongsan.com.vn/phan-tich-nhan-dinh/kho-phan-doan-thoi-diem-phuc-hoi-cua-thi-truong-bat-dong-san-ar107284",
+      "https://batdongsan.com.vn/phan-tich-nhan-dinh/kho-phan-doan-thoi-diem-phuc-hoi-cua-thi-truong-bat-dong-san-ar107284",
+    ];
+    return Column(
+      children: [
+        Padding(
+          padding:
+              const EdgeInsets.symmetric(horizontal: Dimens.default_padding),
+          child: Row(
+            children: const [TitleWithCustomUnderline(text: "News"), Spacer()],
+          ),
+        ),
+        SizedBox(
+          height: size.width * 0.4,
+          child: ListView.builder(
+              itemCount: links.length,
+              scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
+              itemBuilder: (context, index) => NewsWidget(link: links[index])),
+        )
+      ],
+    );
   }
 
   Widget _buildLoading() => const CustomProgressIndicatorWidget();
