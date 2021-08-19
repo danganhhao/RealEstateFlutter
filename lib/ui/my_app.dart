@@ -36,7 +36,6 @@ class _MyAppState extends State<MyApp> {
             textTheme: Theme.of(context).textTheme.apply(bodyColor: AppColors.textColor),
             visualDensity: VisualDensity.adaptivePlatformDensity
         ),
-        home: TabsPage(),
         debugShowCheckedModeBanner: false,
       ),
     );

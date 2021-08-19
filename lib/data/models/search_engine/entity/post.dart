@@ -34,6 +34,7 @@ class PostItem {
   String? province;
   String? district;
   String? contact;
+  String? transaction;
   double? area;
   int? price;
   String? createDay;
@@ -48,6 +49,7 @@ class PostItem {
       this.province,
       this.district,
       this.contact,
+      this.transaction,
       this.area,
       this.price,
       this.createDay,
@@ -78,6 +80,7 @@ class PostItem {
         province: json["province"] as String?,
         district: json["district"] as String?,
         contact: json["contact"] as String?,
+        transaction: json["transaction"] as String?,
         area: json["area"] as double?,
         price: json["price"] as int?,
         createDay: json["created_day"] as String?,
@@ -93,6 +96,7 @@ class PostItem {
         "province": province,
         "district": district,
         "contact": contact,
+        "transaction": transaction,
         "area": area,
         "price": price,
         "created_day": createDay,
