@@ -14,5 +14,9 @@ class Endpoints {
   static const String getPosts = "$baseUrl/api/search/?page=1";
   static const String getCityInfo = "$baseUrl/api/cityinfo/";
   static const String getEstateType = "$baseUrl/api/estatetype/";
+  static const String getProvince = "$baseUrl/api/s/province/";
+  static const String getDistrict = "$baseUrl/api/s/district/";
+  static const String getWard = "$baseUrl/api/s/ward/";
+  static const String getStreet = "$baseUrl/api/s/street/";
 
 }

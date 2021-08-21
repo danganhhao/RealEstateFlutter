@@ -2,6 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:real_estate/constants/colors.dart';
 import 'package:real_estate/constants/dimens.dart';
+import 'package:real_estate/data/bloc/base_state.dart';
+import 'package:real_estate/data/bloc/content_bloc/content_bloc.dart';
+import 'package:real_estate/data/bloc/content_bloc/content_event.dart';
+import 'package:real_estate/data/models/estate_type/estate_type.dart';
+import 'package:real_estate/data/models/location/base_location.dart';
+import 'package:real_estate/data/models/location/district.dart';
+import 'package:real_estate/data/models/location/province.dart';
+import 'package:real_estate/data/models/location/ward.dart';
+import 'package:real_estate/ui/search/search_result.dart';
+import 'package:real_estate/utils/routes/routes.dart';
+import 'package:real_estate/widgets/error_widget.dart';
+import 'package:real_estate/widgets/progress_indicator_widget.dart';
 
 class SearchScreen extends StatefulWidget {
   static Route<dynamic> route() => MaterialPageRoute(
@@ -13,12 +25,13 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  TextEditingController searchController = TextEditingController();
   bool _isShowOptions = false;
-  String _keyword = "";
-  String _cityId= "";
+  String _provinceId = "";
   String _districtId = "";
   String _wardId = "";
   String _estateTypeId = "";
+  List optionsHint = ["Province", "District", "Ward", "Estate type"];
 
   @override
   void initState() {
@@ -40,7 +53,16 @@ class _SearchScreenState extends State<SearchScreen> {
               Center(
                 child: ElevatedButton(
                     child: const Text('Search'),
-                    onPressed: () {},
+                    onPressed: () {
+                      print("keyword${searchController.text}");
+                      print("province$_provinceId");
+                      print("district$_districtId");
+                      print("ward$_wardId");
+                      print("estateType$_estateTypeId");
+                      // Navigator.of(context).pushNamed(Routes.search_result);
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => const SearchResult()));
+                    },
                     style: ElevatedButton.styleFrom(
                         primary: AppColors.primaryColor)),
               )
@@ -80,6 +102,7 @@ class _SearchScreenState extends State<SearchScreen> {
         children: [
           Expanded(
             child: TextField(
+              controller: searchController,
               decoration: InputDecoration(
                 hintText: "Search",
                 hintStyle:
@@ -98,7 +121,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _buildSearchOptions() {
     Map<int, String> options = {};
-    options[0] = "City";
+    options[0] = "Province";
     options[1] = "District";
     options[2] = "Ward";
     options[3] = "Estate type";
@@ -124,7 +147,25 @@ class _SearchScreenState extends State<SearchScreen> {
                       )),
                   InkWell(
                     onTap: () {
-                      _selectBottomSheet();
+                      if (index == 0) {
+                        BlocProvider.of<ContentBloc>(context)
+                            .add(GetProvinceEvent());
+                        _selectBottomSheet();
+                      } else if (index == 1 && _provinceId.isNotEmpty) {
+                        BlocProvider.of<ContentBloc>(context)
+                            .add(GetDistrictEvent(_provinceId));
+                        _selectBottomSheet();
+                      } else if (index == 2 &&
+                          _provinceId.isNotEmpty &&
+                          _districtId.isNotEmpty) {
+                        BlocProvider.of<ContentBloc>(context)
+                            .add(GetWardEvent(_districtId));
+                        _selectBottomSheet();
+                      } else if (index == 3) {
+                        BlocProvider.of<ContentBloc>(context)
+                            .add(GetEstateTypeEvent());
+                        _selectBottomSheet();
+                      }
                     },
                     child: Container(
                         margin: const EdgeInsets.symmetric(
@@ -140,7 +181,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         child: Row(
                           children: [
                             Expanded(
-                              child: Text(options[index] ?? "",
+                              child: Text(optionsHint[index],
                                   style: const TextStyle(
                                       fontSize: 14, color: Colors.black)),
                               flex: 1,
@@ -181,9 +222,95 @@ class _SearchScreenState extends State<SearchScreen> {
                   enabledBorder: InputBorder.none,
                   focusedBorder: InputBorder.none,
                 )),
-              )
+              ),
+              BlocBuilder(
+                  bloc: BlocProvider.of<ContentBloc>(context),
+                  builder: (context, state) {
+                    if (state is BaseInitial || state is BaseLoading) {
+                      return const Center(
+                          child: CustomProgressIndicatorWidget());
+                    } else if (state is BaseLoaded) {
+                      return _buildList(state.data, size);
+                    }
+                    return const NetworkErrorWidget();
+                  })
             ],
           );
         });
+  }
+
+  Widget _buildList(Object data, Size size) {
+    if (data is List<BaseLocation>) {
+      return Expanded(
+          child: SingleChildScrollView(
+        child: ListView.builder(
+            itemCount: data.length,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              return InkWell(
+                onTap: () {
+                  if (data is List<Province>) {
+                    _provinceId = data[index].id.toString();
+                    _districtId = "";
+                    _wardId = "";
+                    setState(() {
+                      optionsHint[0] = data[index].name;
+                      optionsHint[1] = "District";
+                      optionsHint[2] = "Ward";
+                    });
+                  }
+                  if (data is List<District>) {
+                    _districtId = data[index].id.toString();
+                    _wardId = '';
+                    setState(() {
+                      optionsHint[1] = data[index].name;
+                      optionsHint[2] = "Ward";
+                    });
+                  }
+                  if (data is List<Ward>) {
+                    _wardId = data[index].id.toString();
+                    setState(() {
+                      optionsHint[2] = data[index].name;
+                    });
+                  }
+                  Navigator.of(context).pop();
+                },
+                child: Container(
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  child: Text(data[index].name),
+                ),
+              );
+            }),
+      ));
+    }
+    if (data is List<EstateType>) {
+      return Expanded(
+          child: SingleChildScrollView(
+              child: ListView.builder(
+                  itemCount: data.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () {
+                        if (data is List<EstateType>) {
+                          _estateTypeId = data[index].id.toString();
+                          setState(() {
+                            optionsHint[3] = data[index].name;
+                          });
+                        }
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                        child: Text(data[index].name),
+                      ),
+                    );
+                  })));
+    }
+    return Container();
   }
 }

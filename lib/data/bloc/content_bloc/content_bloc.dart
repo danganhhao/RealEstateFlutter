@@ -21,6 +21,26 @@ class ContentBloc extends Bloc<ContentEvent, BaseState> {
         final mList = await _contentRepository.getEstateType();
         yield BaseLoaded(mList);
       }
+      if (event is GetProvinceEvent) {
+        yield const BaseLoading();
+        final mList = await _contentRepository.getProvince();
+        yield BaseLoaded(mList);
+      }
+      if (event is GetDistrictEvent) {
+        yield const BaseLoading();
+        final mList = await _contentRepository.getDistrict(event.proviceId);
+        yield BaseLoaded(mList);
+      }
+      if (event is GetWardEvent) {
+        yield const BaseLoading();
+        final mList = await _contentRepository.getWard(event.districtId);
+        yield BaseLoaded(mList);
+      }
+      if (event is GetStreetEvent) {
+        yield const BaseLoading();
+        final mList = await _contentRepository.getStreet(event.districtId);
+        yield BaseLoaded(mList);
+      }
     } on Error {
       yield const BaseError(1, "message");
     }
