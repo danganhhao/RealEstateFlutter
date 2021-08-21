@@ -10,6 +10,7 @@ import 'package:real_estate/data/models/location/base_location.dart';
 import 'package:real_estate/data/models/location/district.dart';
 import 'package:real_estate/data/models/location/province.dart';
 import 'package:real_estate/data/models/location/ward.dart';
+import 'package:real_estate/data/models/search_engine/request/search_request.dart';
 import 'package:real_estate/ui/search/search_result.dart';
 import 'package:real_estate/utils/routes/routes.dart';
 import 'package:real_estate/widgets/error_widget.dart';
@@ -50,18 +51,21 @@ class _SearchScreenState extends State<SearchScreen> {
               _buildSearchBox(),
               _buildTitleOptions(),
               _buildSearchOptions(),
+              _buildClearOptions(),
               Center(
                 child: ElevatedButton(
                     child: const Text('Search'),
                     onPressed: () {
-                      print("keyword${searchController.text}");
-                      print("province$_provinceId");
-                      print("district$_districtId");
-                      print("ward$_wardId");
-                      print("estateType$_estateTypeId");
-                      // Navigator.of(context).pushNamed(Routes.search_result);
-                      Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => const SearchResult()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SearchResult(
+                                  data: SearchRequest(
+                                      keyword: searchController.text,
+                                      province: _provinceId,
+                                      district: _districtId,
+                                      ward: _wardId,
+                                      estateType: _estateTypeId))));
                     },
                     style: ElevatedButton.styleFrom(
                         primary: AppColors.primaryColor)),
@@ -88,6 +92,34 @@ class _SearchScreenState extends State<SearchScreen> {
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
         ));
+  }
+
+  Widget _buildClearOptions() {
+    return _isShowOptions == true ? InkWell(
+        onTap: () {
+          setState(() {
+            _provinceId = "";
+            _districtId = "";
+            _wardId = "";
+            _estateTypeId = "";
+            setState(() {
+              optionsHint[0] = "Province";
+              optionsHint[1] = "District";
+              optionsHint[2] = "Ward";
+              optionsHint[3] = "Estate type";
+            });
+          });
+        },
+        child: Container(
+          margin: const EdgeInsets.symmetric(
+              horizontal: Dimens.default_padding * .5,
+              vertical: Dimens.default_padding * .5),
+          alignment: Alignment.centerRight,
+          child: const Text(
+            "Clear",
+            style: TextStyle(fontSize:16, fontStyle: FontStyle.normal, color: Colors.red),
+          ),
+        )): Container();
   }
 
   Widget _buildSearchBox() {

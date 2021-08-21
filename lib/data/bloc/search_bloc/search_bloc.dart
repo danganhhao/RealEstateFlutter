@@ -13,8 +13,10 @@ class SearchBloc extends Bloc<SearchEvent, BaseState> {
   Stream<BaseState> mapEventToState(SearchEvent event) async*  {
     if (event is GetSearchEvent) {
       try {
-        yield const BaseLoading();
-        final mList = await _searchRepository.getPosts();
+        if (event.page == 1) {
+          yield const BaseLoading();
+        }
+        final mList = await _searchRepository.getPosts(event.data, event.page);
         yield BaseLoaded(mList);
       } on Error {
         yield const BaseError(1, "message");

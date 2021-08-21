@@ -6,6 +6,8 @@ import 'package:real_estate/data/bloc/base_state.dart';
 import 'package:real_estate/data/bloc/content_bloc/content_bloc.dart';
 import 'package:real_estate/data/bloc/content_bloc/content_event.dart';
 import 'package:real_estate/data/models/estate_type/estate_type.dart';
+import 'package:real_estate/data/models/search_engine/request/search_request.dart';
+import 'package:real_estate/ui/search/search_result.dart';
 import 'package:real_estate/utils/app_utils.dart';
 import 'package:real_estate/widgets/error_widget.dart';
 import 'package:real_estate/widgets/progress_indicator_widget.dart';
@@ -16,7 +18,7 @@ class CategoryScreen extends StatefulWidget {
   static Route<dynamic> route() => MaterialPageRoute(
         builder: (context) => CategoryScreen(),
       );
- 
+
   @override
   _CategoryScreenState createState() => _CategoryScreenState();
 }
@@ -81,7 +83,14 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 mainAxisSpacing: 5),
             itemBuilder: (context, index) {
               return InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SearchResult(
+                              data: SearchRequest(
+                                  estateType: data[index].id.toString()))));
+                },
                 child: Container(
                   padding: const EdgeInsets.all(5),
                   alignment: Alignment.center,

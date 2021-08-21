@@ -12,13 +12,11 @@ class Routes {
   static const String splash = '/';
   static const String tab = '/tab';
   static const String home = '/home';
-  static const String search_result = '/search_result';
 
   static final routes = <String, WidgetBuilder>{
     splash: (BuildContext context) => SplashScreen(),
     tab: (BuildContext context) => TabsPage(),
     home: (BuildContext context) => HomeScreen(),
-    search_result: (BuildContext context) => SearchResult(),
   };
 }
 

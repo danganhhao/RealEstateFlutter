@@ -11,10 +11,12 @@ import 'package:real_estate/data/bloc/search_bloc/search_bloc.dart';
 import 'package:real_estate/data/bloc/search_bloc/search_event.dart';
 import 'package:real_estate/data/models/city_info/city_info.dart';
 import 'package:real_estate/data/models/search_engine/entity/post.dart';
+import 'package:real_estate/data/models/search_engine/request/search_request.dart';
 import 'package:real_estate/ui/home/grid_city.dart';
 import 'package:real_estate/ui/home/news_widget.dart';
 import 'package:real_estate/ui/home/post_card.dart';
 import 'package:real_estate/ui/home/title_with_more_btn.dart';
+import 'package:real_estate/ui/search/search_result.dart';
 import 'package:real_estate/utils/snackbar/snackbar.dart';
 import 'package:real_estate/widgets/error_widget.dart';
 import 'package:real_estate/widgets/progress_indicator_widget.dart';
@@ -33,7 +35,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
-    BlocProvider.of<SearchBloc>(context).add(GetSearchEvent());
+    BlocProvider.of<SearchBloc>(context).add(GetSearchEvent(data: SearchRequest(), page: 1));
     BlocProvider.of<ContentBloc>(context).add(GetCityInfoEvent());
     super.initState();
   }
@@ -68,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Size size = MediaQuery.of(context).size;
     return RefreshIndicator(
       onRefresh: () async {
-        BlocProvider.of<SearchBloc>(context).add(GetSearchEvent());
+        BlocProvider.of<SearchBloc>(context).add(GetSearchEvent(data: SearchRequest(), page: 1));
         BlocProvider.of<ContentBloc>(context).add(GetCityInfoEvent());
       },
       child: SingleChildScrollView(
@@ -118,7 +120,9 @@ class _HomeScreenState extends State<HomeScreen> {
               TitleWithMoreBtn(
                   title: "Recommend",
                   press: () {
-                    Snackbar.show(context, "Press!");
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => SearchResult(
+                                data: SearchRequest())));
                   }),
               SizedBox(
                   height: size.width * 0.6,
