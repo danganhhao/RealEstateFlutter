@@ -16,7 +16,7 @@ class CategoryScreen extends StatefulWidget {
   static Route<dynamic> route() => MaterialPageRoute(
         builder: (context) => CategoryScreen(),
       );
-
+ 
   @override
   _CategoryScreenState createState() => _CategoryScreenState();
 }
@@ -31,7 +31,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Category")),
+      appBar: AppBar(title: const Center(child: Text("Category"))),
       body: _buildBody(),
     );
   }
