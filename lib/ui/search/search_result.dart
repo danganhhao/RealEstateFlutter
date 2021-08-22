@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:real_estate/constants/colors.dart';
 import 'package:real_estate/data/bloc/base_state.dart';
 import 'package:real_estate/data/bloc/content_bloc/content_bloc.dart';
 import 'package:real_estate/data/bloc/search_bloc/search_bloc.dart';
@@ -14,7 +16,6 @@ import 'package:real_estate/widgets/progress_indicator_widget.dart';
 import 'package:real_estate/data/extensions/list_extension.dart';
 import 'package:real_estate/data/extensions/string_extension.dart';
 
-
 class SearchResult extends StatelessWidget {
   final SearchRequest data;
 
@@ -27,11 +28,12 @@ class SearchResult extends StatelessWidget {
         BlocProvider(create: (_) => getIt<SearchBloc>()),
         BlocProvider(create: (_) => getIt<ContentBloc>()),
       ],
-      child: _SearchResult(data: data,),
+      child: _SearchResult(
+        data: data,
+      ),
     );
   }
 }
-
 
 class _SearchResult extends StatefulWidget {
   final SearchRequest data;
@@ -55,7 +57,8 @@ class _SearchResultState extends State<_SearchResult> {
   @override
   void initState() {
     _scrollController.addListener(_onScroll);
-    BlocProvider.of<SearchBloc>(context).add(GetSearchEvent(data: data, page: page));
+    BlocProvider.of<SearchBloc>(context)
+        .add(GetSearchEvent(data: data, page: page));
     super.initState();
   }
 
@@ -75,7 +78,7 @@ class _SearchResultState extends State<_SearchResult> {
   Widget _buildBody() {
     return Container(
       child: Column(
-        children: [Text("AAA"), _buildListPostBloc()],
+        children: [_buildSearchOptions(), _buildListPostBloc()],
       ),
     );
   }
@@ -92,7 +95,9 @@ class _SearchResultState extends State<_SearchResult> {
             if (state.data is Post) {
               Post data = (state.data as Post);
               items.addAll(data.result ?? []);
-              totalPage = int.parse(data.totalPage.orEmpty());
+              if (data.totalPage.orEmpty().isNotEmpty) {
+                totalPage = int.parse(data.totalPage.orEmpty());
+              }
               return _buildListPost();
             }
           }
@@ -120,6 +125,78 @@ class _SearchResultState extends State<_SearchResult> {
                     );
                   }
                 })));
+  }
+
+  Widget _buildSearchOptions() {
+    Size size = MediaQuery.of(context).size;
+    return Container(
+      width: size.width,
+      height: 50,
+      decoration: const BoxDecoration(
+          border: Border(bottom: BorderSide(color: Colors.black, width: 1))),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.sort,
+                  color: AppColors.primaryColor,
+                ),
+                Container(
+                  margin: const EdgeInsets.only(left: 5),
+                  child: const Text(
+                    "Sort",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                )
+              ],
+            ),
+          ),
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.filter_alt,
+                  color: AppColors.primaryColor,
+                ),
+                Container(
+                  margin: const EdgeInsets.only(left: 5),
+                  child: const Text(
+                    "Filter",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                )
+              ],
+            ),
+          ),
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.map,
+                  color: AppColors.primaryColor,
+                ),
+                Container(
+                  margin: const EdgeInsets.only(left: 5),
+                  child: const Text(
+                    "Map",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   void _onScroll() {
