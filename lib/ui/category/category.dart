@@ -7,23 +7,33 @@ import 'package:real_estate/data/bloc/content_bloc/content_bloc.dart';
 import 'package:real_estate/data/bloc/content_bloc/content_event.dart';
 import 'package:real_estate/data/models/estate_type/estate_type.dart';
 import 'package:real_estate/data/models/search_engine/request/search_request.dart';
+import 'package:real_estate/di/components/service_locator.dart';
 import 'package:real_estate/ui/search/search_result.dart';
 import 'package:real_estate/utils/app_utils.dart';
 import 'package:real_estate/widgets/error_widget.dart';
 import 'package:real_estate/widgets/progress_indicator_widget.dart';
 
-class CategoryScreen extends StatefulWidget {
+
+class CategoryScreen extends StatelessWidget {
   const CategoryScreen({Key? key}) : super(key: key);
 
-  static Route<dynamic> route() => MaterialPageRoute(
-        builder: (context) => CategoryScreen(),
-      );
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => getIt<ContentBloc>(),
+      child: const _Category(),
+    );
+  }
+}
+
+class _Category extends StatefulWidget {
+  const _Category({Key? key}) : super(key: key);
 
   @override
   _CategoryScreenState createState() => _CategoryScreenState();
 }
 
-class _CategoryScreenState extends State<CategoryScreen> {
+class _CategoryScreenState extends State<_Category> {
   @override
   void initState() {
     BlocProvider.of<ContentBloc>(context).add(GetEstateTypeEvent());

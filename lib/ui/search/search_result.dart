@@ -2,30 +2,53 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:real_estate/data/bloc/base_state.dart';
+import 'package:real_estate/data/bloc/content_bloc/content_bloc.dart';
 import 'package:real_estate/data/bloc/search_bloc/search_bloc.dart';
 import 'package:real_estate/data/bloc/search_bloc/search_event.dart';
 import 'package:real_estate/data/models/search_engine/entity/post.dart';
 import 'package:real_estate/data/models/search_engine/request/search_request.dart';
+import 'package:real_estate/di/components/service_locator.dart';
 import 'package:real_estate/ui/search/search_post_item.dart';
 import 'package:real_estate/widgets/error_widget.dart';
 import 'package:real_estate/widgets/progress_indicator_widget.dart';
+import 'package:real_estate/data/extensions/list_extension.dart';
+import 'package:real_estate/data/extensions/string_extension.dart';
 
-class SearchResult extends StatefulWidget {
+
+class SearchResult extends StatelessWidget {
   final SearchRequest data;
 
   const SearchResult({Key? key, required this.data}) : super(key: key);
 
   @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => getIt<SearchBloc>()),
+        BlocProvider(create: (_) => getIt<ContentBloc>()),
+      ],
+      child: _SearchResult(data: data,),
+    );
+  }
+}
+
+
+class _SearchResult extends StatefulWidget {
+  final SearchRequest data;
+
+  const _SearchResult({Key? key, required this.data}) : super(key: key);
+
+  @override
   _SearchResultState createState() => _SearchResultState(data: data);
 }
 
-class _SearchResultState extends State<SearchResult> {
+class _SearchResultState extends State<_SearchResult> {
   final SearchRequest data;
   final List<PostItem> items = [];
   final _scrollController = ScrollController();
   final _scrollThreshold = 200.0;
   int page = 1;
-  bool isInitState = false;
+  int totalPage = 0;
 
   _SearchResultState({required this.data});
 
@@ -33,7 +56,6 @@ class _SearchResultState extends State<SearchResult> {
   void initState() {
     _scrollController.addListener(_onScroll);
     BlocProvider.of<SearchBloc>(context).add(GetSearchEvent(data: data, page: page));
-    isInitState = true;
     super.initState();
   }
 
@@ -69,9 +91,8 @@ class _SearchResultState extends State<SearchResult> {
           } else if (state is BaseLoaded) {
             if (state.data is Post) {
               Post data = (state.data as Post);
-              if (!isInitState) {
-                items.addAll(data.result ?? []);
-              }
+              items.addAll(data.result ?? []);
+              totalPage = int.parse(data.totalPage.orEmpty());
               return _buildListPost();
             }
           }
@@ -80,7 +101,6 @@ class _SearchResultState extends State<SearchResult> {
   }
 
   Widget _buildListPost() {
-    isInitState = false;
     return Expanded(
         child: SingleChildScrollView(
             controller: _scrollController,
@@ -105,7 +125,7 @@ class _SearchResultState extends State<SearchResult> {
   void _onScroll() {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.position.pixels;
-    if (maxScroll - currentScroll <= _scrollThreshold) {
+    if (page <= totalPage && maxScroll - currentScroll <= _scrollThreshold) {
       BlocProvider.of<SearchBloc>(context)
           .add(GetSearchEvent(data: data, page: ++page));
     }

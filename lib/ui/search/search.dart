@@ -5,27 +5,40 @@ import 'package:real_estate/constants/dimens.dart';
 import 'package:real_estate/data/bloc/base_state.dart';
 import 'package:real_estate/data/bloc/content_bloc/content_bloc.dart';
 import 'package:real_estate/data/bloc/content_bloc/content_event.dart';
+import 'package:real_estate/data/bloc/search_bloc/search_bloc.dart';
 import 'package:real_estate/data/models/estate_type/estate_type.dart';
 import 'package:real_estate/data/models/location/base_location.dart';
 import 'package:real_estate/data/models/location/district.dart';
 import 'package:real_estate/data/models/location/province.dart';
 import 'package:real_estate/data/models/location/ward.dart';
 import 'package:real_estate/data/models/search_engine/request/search_request.dart';
+import 'package:real_estate/di/components/service_locator.dart';
 import 'package:real_estate/ui/search/search_result.dart';
 import 'package:real_estate/utils/routes/routes.dart';
 import 'package:real_estate/widgets/error_widget.dart';
 import 'package:real_estate/widgets/progress_indicator_widget.dart';
 
-class SearchScreen extends StatefulWidget {
-  static Route<dynamic> route() => MaterialPageRoute(
-        builder: (context) => SearchScreen(),
-      );
+
+class SearchScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => getIt<SearchBloc>()),
+        BlocProvider(create: (_) => getIt<ContentBloc>()),
+      ],
+      child: _Search(),
+    );
+  }
+}
+
+class _Search extends StatefulWidget {
 
   @override
   _SearchScreenState createState() => _SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class _SearchScreenState extends State<_Search> {
   TextEditingController searchController = TextEditingController();
   bool _isShowOptions = false;
   String _provinceId = "";

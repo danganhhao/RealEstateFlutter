@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:real_estate/data/network/constants/endpoints.dart';
 import 'package:real_estate/data/sharedpref/shared_preference_helper.dart';
+import 'package:real_estate/di/module/logging_interceptor.dart';
 
 abstract class NetworkModule {
   /// A singleton dio provider.
@@ -14,7 +15,7 @@ abstract class NetworkModule {
       ..options.connectTimeout = Endpoints.connectionTimeout
       ..options.receiveTimeout = Endpoints.receiveTimeout
       ..options.headers = {'Content-Type': 'application/json; charset=utf-8'}
-      ..interceptors.add(LogInterceptor(
+      ..interceptors.add(LoggingInterceptor(
         request: true,
         responseBody: true,
         requestBody: true,

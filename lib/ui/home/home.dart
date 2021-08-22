@@ -12,6 +12,7 @@ import 'package:real_estate/data/bloc/search_bloc/search_event.dart';
 import 'package:real_estate/data/models/city_info/city_info.dart';
 import 'package:real_estate/data/models/search_engine/entity/post.dart';
 import 'package:real_estate/data/models/search_engine/request/search_request.dart';
+import 'package:real_estate/di/components/service_locator.dart';
 import 'package:real_estate/ui/home/grid_city.dart';
 import 'package:real_estate/ui/home/news_widget.dart';
 import 'package:real_estate/ui/home/post_card.dart';
@@ -23,16 +24,30 @@ import 'package:real_estate/widgets/progress_indicator_widget.dart';
 
 import 'header.dart';
 
-class HomeScreen extends StatefulWidget {
-  static Route<dynamic> route() => MaterialPageRoute(
-        builder: (context) => HomeScreen(),
-      );
+class HomeScreen extends StatelessWidget {
 
+  static Route<dynamic> route() => MaterialPageRoute(
+    builder: (context) => HomeScreen(),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => getIt<SearchBloc>()),
+        BlocProvider(create: (_) => getIt<ContentBloc>()),
+      ],
+      child: _Home(),
+    );
+  }
+}
+
+class _Home extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<_Home> {
   @override
   void initState() {
     BlocProvider.of<SearchBloc>(context).add(GetSearchEvent(data: SearchRequest(), page: 1));
