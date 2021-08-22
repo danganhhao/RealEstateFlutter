@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:real_estate/constants/colors.dart';
 import 'package:real_estate/data/bloc/base_state.dart';
 import 'package:real_estate/data/bloc/search_bloc/search_bloc.dart';
 import 'package:real_estate/data/bloc/search_bloc/search_event.dart';
@@ -26,15 +25,22 @@ class _SearchResultState extends State<SearchResult> {
   final _scrollController = ScrollController();
   final _scrollThreshold = 200.0;
   int page = 1;
+  bool isInitState = false;
 
   _SearchResultState({required this.data});
 
   @override
   void initState() {
-    super.initState();
     _scrollController.addListener(_onScroll);
-    BlocProvider.of<SearchBloc>(context)
-        .add(GetSearchEvent(data: data, page: page));
+    BlocProvider.of<SearchBloc>(context).add(GetSearchEvent(data: data, page: page));
+    isInitState = true;
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    items.clear();
+    super.dispose();
   }
 
   @override
@@ -63,7 +69,9 @@ class _SearchResultState extends State<SearchResult> {
           } else if (state is BaseLoaded) {
             if (state.data is Post) {
               Post data = (state.data as Post);
-              items.addAll(data.result ?? []);
+              if (!isInitState) {
+                items.addAll(data.result ?? []);
+              }
               return _buildListPost();
             }
           }
@@ -72,7 +80,7 @@ class _SearchResultState extends State<SearchResult> {
   }
 
   Widget _buildListPost() {
-    Size size = MediaQuery.of(context).size;
+    isInitState = false;
     return Expanded(
         child: SingleChildScrollView(
             controller: _scrollController,
@@ -81,7 +89,6 @@ class _SearchResultState extends State<SearchResult> {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
-                  final title = "${items[index].id}.${items[index].title}";
                   if ((index >= items.length - 1)) {
                     return const Center(
                       child: CircularProgressIndicator(),
@@ -103,11 +110,4 @@ class _SearchResultState extends State<SearchResult> {
           .add(GetSearchEvent(data: data, page: ++page));
     }
   }
-
-  @override
-  void dispose() {
-    items.clear();
-    super.dispose();
-  }
-
 }

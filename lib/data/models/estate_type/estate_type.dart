@@ -7,4 +7,9 @@ class EstateType {
   factory EstateType.fromJson(dynamic json) {
     return EstateType(id: json["id"], name: json["name"]);
   }
+
+  @override
+  String toString() {
+    return "{\"id\": $id, \"name\": $name }";
+  }
 }

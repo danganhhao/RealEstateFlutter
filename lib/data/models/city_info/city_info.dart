@@ -8,6 +8,11 @@ class CityInfo {
     items = json.map((city) => CityItem.fromJson(city)).toList();
     return CityInfo(items: items);
   }
+
+  @override
+  String toString() {
+    return "{\"items\": ${items?.map((e) => e.toString()).toList()} }";
+  }
 }
 
 class CityItem {
@@ -34,4 +39,9 @@ class CityItem {
         "total_estate": totalEstate,
         "images": images,
       };
+
+  @override
+  String toString() {
+    return "{\"id\": $id, \"name\": $name, \"total_estate\": $totalEstate, \"images\": $images }";
+  }
 }

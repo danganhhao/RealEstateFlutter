@@ -105,6 +105,14 @@ class PostItem {
         "project": project,
         "images": images,
       };
+
+  @override
+  String toString() {
+    return "{\"id\": $id, \"title\": $title, \"province\": $province, \"district\": $district, "
+        "\"contact\": $contact, \"transaction\": $transaction, \"area\": $area, \"price\": $price,"
+        " \"created_day\": $createDay, \"lat\": $lat, \"lng\": $lng, "
+        "\"project\": ${project.toString()}, \"images\": ${images?.map((e) => e.toString()).toList()}";
+  }
 }
 
 class Project {
@@ -136,6 +144,11 @@ class Project {
         "lat": lat,
         "lng": lng,
       };
+
+  @override
+  String toString() {
+    return "{\"id\": $id, \"name\": $name, \"lat\": $lat, \"lng\": $lng }";
+  }
 }
 
 class PostImage {
@@ -155,4 +168,9 @@ class PostImage {
         "id": id,
         "image": image,
       };
+
+  @override
+  String toString() {
+    return "{\"id\": $id, \"image\": $image }";
+  }
 }

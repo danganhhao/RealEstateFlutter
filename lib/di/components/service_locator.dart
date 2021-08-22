@@ -66,7 +66,7 @@ Future<void> setupLocator() async {
   // getIt.registerSingleton(UserStore(getIt<Repository>()));
 
   // blocs:---------------------------------------------------------------------
-  getIt.registerSingleton(UserBloc(getIt<UserRepository>()));
-  getIt.registerSingleton(SearchBloc(getIt<SearchRepository>()));
-  getIt.registerSingleton(ContentBloc(getIt<ContentRepository>()));
+  getIt.registerFactory<UserBloc>(() => UserBloc(getIt<UserRepository>()));
+  getIt.registerFactory<SearchBloc>(() => SearchBloc(getIt<SearchRepository>()));
+  getIt.registerFactory<ContentBloc>(() => ContentBloc(getIt<ContentRepository>()));
 }

@@ -39,4 +39,13 @@ class SearchRequest {
       this.filterNumberOfRoom = "",
       this.filterPostTime = "",
       this.deviceId = ""});
+
+  @override
+  String toString() {
+    return "{\"keyword\": $keyword, \"province\": $province, \"district\": $district,"
+        " \"ward\": $ward, \"street\": $street, \"estateType\": $estateType, \"sort\": $sort,"
+        "\"filterMaxPrice\": $filterMaxPrice,\"filterMinPrice\": $filterMinPrice,"
+        "\"filterArea\": $filterArea,\"filterNumberOfRoom\": $filterNumberOfRoom,"
+        "\"filterPostTime\": $filterPostTime ,\"deviceId\": $deviceId }";
+  }
 }

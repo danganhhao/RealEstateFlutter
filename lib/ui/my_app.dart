@@ -22,9 +22,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => UserBloc(getIt<UserRepository>())),
-        BlocProvider(create: (_) => SearchBloc(getIt<SearchRepository>())),
-        BlocProvider(create: (_) => ContentBloc(getIt<ContentRepository>())),
+        BlocProvider(create: (_) => getIt<UserBloc>()),
+        BlocProvider(create: (_) => getIt<SearchBloc>()),
+        BlocProvider(create: (_) => getIt<ContentBloc>()),
       ],
       child: MaterialApp(
         title: "Real Estate",

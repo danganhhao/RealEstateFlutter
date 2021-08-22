@@ -12,4 +12,9 @@ class Street extends BaseLocation {
   factory Street.fromJson(dynamic json) {
     return Street(id: json["id"], name: json["name"], prefix: json["prefix"]);
   }
+
+  @override
+  String toString() {
+    return "{\"id\": $id, \"name\": $name, \"prefix\": $prefix }";
+  }
 }

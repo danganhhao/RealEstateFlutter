@@ -12,4 +12,9 @@ class District extends BaseLocation {
   factory District.fromJson(dynamic json) {
     return District(id: json["id"], name: json["name"], prefix: json["prefix"]);
   }
+
+  @override
+  String toString() {
+    return "{\"id\": $id, \"name\": $name, \"prefix\": $prefix }";
+  }
 }

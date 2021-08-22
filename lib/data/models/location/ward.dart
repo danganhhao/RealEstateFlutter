@@ -12,4 +12,9 @@ class Ward extends BaseLocation{
   factory Ward.fromJson(dynamic json) {
     return Ward(id: json["id"], name: json["name"], prefix: json["prefix"]);
   }
+
+  @override
+  String toString() {
+    return "{\"id\": $id, \"name\": $name, \"prefix\": $prefix }";
+  }
 }
