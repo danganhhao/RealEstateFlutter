@@ -40,6 +40,15 @@ dependencies:
   # Web viewer
   webview_flutter: ^2.0.10
 
+  # Map
+  flutter_map: any
+  flutter_map_marker_cluster: any
+  user_location:
+    git:
+      url: https://github.com/igaurab/user_location_plugin.git
+
+  latlong: any
+
   # XXTEA is a fast and secure encryption algorithm. This is a XXTEA library for Dart.
   xxtea: ^2.1.0
 

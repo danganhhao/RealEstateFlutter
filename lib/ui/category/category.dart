@@ -13,7 +13,6 @@ import 'package:real_estate/utils/app_utils.dart';
 import 'package:real_estate/widgets/error_widget.dart';
 import 'package:real_estate/widgets/progress_indicator_widget.dart';
 
-
 class CategoryScreen extends StatelessWidget {
   const CategoryScreen({Key? key}) : super(key: key);
 
@@ -96,10 +95,8 @@ class _CategoryScreenState extends State<_Category> {
                 onTap: () {
                   Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => SearchResult(
-                              data: SearchRequest(
-                                  estateType: data[index].id.toString()))));
+                      SearchResult.route(SearchRequest(
+                          estateType: data[index].id.toString())));
                 },
                 child: Container(
                   padding: const EdgeInsets.all(5),

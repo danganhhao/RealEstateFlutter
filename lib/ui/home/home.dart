@@ -135,9 +135,7 @@ class _HomeScreenState extends State<_Home> {
               TitleWithMoreBtn(
                   title: "Recommend",
                   press: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => SearchResult(
-                                data: SearchRequest())));
+                    Navigator.push(context, SearchResult.route(SearchRequest()));
                   }),
               SizedBox(
                   height: size.width * 0.6,

@@ -71,14 +71,12 @@ class _SearchScreenState extends State<_Search> {
                     onPressed: () {
                       Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => SearchResult(
-                                  data: SearchRequest(
-                                      keyword: searchController.text,
-                                      province: _provinceId,
-                                      district: _districtId,
-                                      ward: _wardId,
-                                      estateType: _estateTypeId))));
+                          SearchResult.route(SearchRequest(
+                              keyword: searchController.text,
+                              province: _provinceId,
+                              district: _districtId,
+                              ward: _wardId,
+                              estateType: _estateTypeId)));
                     },
                     style: ElevatedButton.styleFrom(
                         primary: AppColors.primaryColor)),

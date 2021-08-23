@@ -10,6 +10,7 @@ import 'package:real_estate/data/bloc/search_bloc/search_event.dart';
 import 'package:real_estate/data/models/search_engine/entity/post.dart';
 import 'package:real_estate/data/models/search_engine/request/search_request.dart';
 import 'package:real_estate/di/components/service_locator.dart';
+import 'package:real_estate/ui/search/search_map.dart';
 import 'package:real_estate/ui/search/search_post_item.dart';
 import 'package:real_estate/widgets/error_widget.dart';
 import 'package:real_estate/widgets/progress_indicator_widget.dart';
@@ -17,6 +18,11 @@ import 'package:real_estate/data/extensions/list_extension.dart';
 import 'package:real_estate/data/extensions/string_extension.dart';
 
 class SearchResult extends StatelessWidget {
+
+  static Route<dynamic> route(SearchRequest data) => MaterialPageRoute(
+    builder: (context) => SearchResult(data: data),
+  );
+
   final SearchRequest data;
 
   const SearchResult({Key? key, required this.data}) : super(key: key);
@@ -138,62 +144,73 @@ class _SearchResultState extends State<_SearchResult> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(
-                  Icons.sort,
-                  color: AppColors.primaryColor,
-                ),
-                Container(
-                  margin: const EdgeInsets.only(left: 5),
-                  child: const Text(
-                    "Sort",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            child: InkWell(
+              onTap: () {},
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.sort,
+                    color: AppColors.primaryColor,
                   ),
-                )
-              ],
+                  Container(
+                    margin: const EdgeInsets.only(left: 5),
+                    child: const Text(
+                      "Sort",
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
           Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(
-                  Icons.filter_alt,
-                  color: AppColors.primaryColor,
-                ),
-                Container(
-                  margin: const EdgeInsets.only(left: 5),
-                  child: const Text(
-                    "Filter",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            child: InkWell(
+              onTap: () {},
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.filter_alt,
+                    color: AppColors.primaryColor,
                   ),
-                )
-              ],
+                  Container(
+                    margin: const EdgeInsets.only(left: 5),
+                    child: const Text(
+                      "Filter",
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
           Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(
-                  Icons.map,
-                  color: AppColors.primaryColor,
-                ),
-                Container(
-                  margin: const EdgeInsets.only(left: 5),
-                  child: const Text(
-                    "Map",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            child: InkWell(
+              onTap: () {
+                Navigator.push(context, SearchMap.route(items));
+              },
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.map,
+                    color: AppColors.primaryColor,
                   ),
-                )
-              ],
+                  Container(
+                    margin: const EdgeInsets.only(left: 5),
+                    child: const Text(
+                      "Map",
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
+          )
         ],
       ),
     );
